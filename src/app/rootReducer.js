@@ -1,7 +1,9 @@
-import authReducer from '../features/login/authSlice'
+import userReducer from './reducers/userSlice'
+import tasksReducer from '../features/tasks/tasksSlice'
 
 const rootReducer = {
-	auth: authReducer,
+	user: userReducer,
+	tasks: tasksReducer,
 }
 
 export default rootReducer
