@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { MdEdit, MdDeleteForever } from 'react-icons/md'
 
-import styles from './Tasks.module.css'
+import styles from './Task.module.css'
 
-function Task() {
+function Task({ details, editHandler, removeHandler }) {
 	const [isEditing, setIsEditing] = useState(false)
 
 	const {
@@ -26,14 +26,16 @@ function Task() {
 		resetForm()
 	}
 
-	const submitForm = (formValues) => {
-		// editHandler(details.id, formValues)
+	const submitEdit = (formValues) => {
+		editHandler(details.id, formValues)
+
+		setIsEditing(false)
 	}
 
 	const viewTemplate = (
 		<div className={`${styles.task} shadow-sm`}>
 			<div className={styles.task_header}>
-				{/* <label>{details.title}</label> */}
+				<label>{details.title}</label>
 
 				<div className="d-flex align-items-center">
 					<button
@@ -43,7 +45,7 @@ function Task() {
 						<MdEdit fontSize="1.6rem" />
 					</button>
 					<button
-						// onClick={(e) => deleteHandler(details.id)}
+						onClick={(e) => removeHandler(details.id)}
 						className={`btn py-1 px-2 ${styles.task_btn_red}`}
 					>
 						<MdDeleteForever fontSize="1.6rem" />
@@ -52,14 +54,14 @@ function Task() {
 			</div>
 
 			<div className={styles.task_body}>
-				{/* <p>{details.description}</p> */}
+				<p>{details.description}</p>
 				<label
-				// style={{
-				// 	backgroundColor:
-				// 		typeToColorMap[details.type.toLowerCase()],
-				// }}
+					style={{
+						backgroundColor:
+							typeToColorMap[details.type.toLowerCase()],
+					}}
 				>
-					{/* {details.type} */}
+					{details.type}
 				</label>
 			</div>
 		</div>
@@ -67,23 +69,41 @@ function Task() {
 
 	const editTemplate = (
 		<div className={`${styles.task} shadow`}>
-			<form onSubmit={handleSubmit(submitForm)}>
-				<div className={`form-row ${styles.task_header}`}>
-					<div className="col-8">
+			<form onSubmit={handleSubmit(submitEdit)}>
+				<div className={`row ${styles.task_header}`}>
+					{/* Title */}
+					<div className="col-12 col-sm-7 col-md-8">
 						<input
 							type="text"
 							{...register('title', {
-								required: true,
-								minLength: 2,
-								maxLength: 100,
+								required: {
+									value: true,
+									message: 'Title is required.',
+								},
+								minLength: {
+									value: 3,
+									message: 'Enter at least 3 characters.',
+								},
+								maxLength: {
+									value: 100,
+									message:
+										"Can't be more than 100 characters.",
+								},
 							})}
-							// defaultValue={details.title}
+							defaultValue={details.title}
 							placeholder="Title"
 							className="form-control"
 						/>
+
+						{errors.title && (
+							<span className="form-text text-danger">
+								{errors.title.message}
+							</span>
+						)}
 					</div>
 
-					<div className="col-auto d-flex align-items-center">
+					{/* Form buttons */}
+					<div className="col d-flex justify-content-end align-items-center">
 						<button
 							type="submit"
 							className={`btn py-1 px-2 ${styles.task_btn_confirm}`}
@@ -93,34 +113,59 @@ function Task() {
 						<button
 							type="button"
 							onClick={discardHandler}
-							className={`btn py-1 px-2`}
+							className={`btn py-1 px-1`}
 						>
 							Discard
 						</button>
 					</div>
 				</div>
-				<div className={`form-row ${styles.task_body}`}>
-					<div className="col-8">
+				<div className={`row ${styles.task_body}`}>
+					{/* Description */}
+					<div className="col-12 col-md-8">
 						<input
 							type="text"
 							{...register('description')}
-							// defaultValue={details.description}
+							defaultValue={details.description}
 							placeholder="Description"
 							className="form-control"
 						/>
+
+						{errors.description && (
+							<span className="form-text text-danger">
+								{errors.description.message}
+							</span>
+						)}
 					</div>
-					<div className="col-auto">
+
+					{/* Type */}
+					<div className="col">
 						<input
 							type="text"
 							{...register('type', {
-								required: true,
-								minLength: 2,
-								maxLength: 20,
+								required: {
+									value: true,
+									message: 'Type is required.',
+								},
+								minLength: {
+									value: 3,
+									message: 'Enter at least 3 characters.',
+								},
+								maxLength: {
+									value: 20,
+									message:
+										"Can't be more than 20 characters.",
+								},
 							})}
-							// defaultValue={details.type}
+							defaultValue={details.type}
 							placeholder="Type"
 							className="form-control"
 						/>
+
+						{errors.type && (
+							<span className="form-text text-danger">
+								{errors.type.message}
+							</span>
+						)}
 					</div>
 				</div>
 			</form>

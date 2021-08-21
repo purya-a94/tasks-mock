@@ -16,6 +16,10 @@ export const signIn = createAsyncThunk(
 		try {
 			const result = await userSignIn(username, password)
 
+			// Is this the best place to put this?
+			// Or should it go inside authService? Or somewhere else?
+			localStorage.setItem('user', JSON.stringify(result))
+
 			return result
 		} catch (error) {
 			return rejectWithValue(error.message)

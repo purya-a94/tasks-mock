@@ -1,5 +1,9 @@
+.tasks {
+	padding-bottom: 4em;
+}
+
 .tasks_form_wrapper {
 	padding: 1em;
 	background-color: #cfd8dc;
-	border-radius: 4px;
+	border-radius: 3px;
 }
