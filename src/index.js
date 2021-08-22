@@ -6,6 +6,15 @@ import store from './app/store'
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
 
+import axiosClient from './app/axiosClient'
+
+axiosClient.interceptors.response.use(null, (error) => {
+	if (error.response.status === 401) {
+		store.dispatch({ type: 'user/signOut' })
+	}
+	return Promise.reject(error)
+})
+
 ReactDOM.render(
 	<React.StrictMode>
 		<Provider store={store}>

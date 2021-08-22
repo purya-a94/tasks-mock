@@ -5,7 +5,11 @@ const initialState = {
 	status: 'idle',
 	list: [],
 	error: '',
-	operationMessage: '',
+	operationLog: {
+		id: -1,
+		message: '',
+		type: '',
+	},
 }
 
 export const getTasks = createAsyncThunk(
@@ -153,10 +157,18 @@ const tasksSlice = createSlice({
 			// Add
 			.addCase(addTask.fulfilled, (state, action) => {
 				state.list.push(action.payload)
-				state.operationMessage = 'Task was successfully added.'
+				state.operationLog = {
+					id: state.operationLog.id + 1,
+					message: 'Task was successfully added.',
+					type: 'success',
+				}
 			})
 			.addCase(addTask.rejected, (state, action) => {
-				state.operationMessage = `Failed to add task. Try again later.\nError: ${action.payload}`
+				state.operationLog = {
+					id: state.operationLog.id + 1,
+					message: `Failed to add task. Try again later.\nError: ${action.payload}`,
+					type: 'failure',
+				}
 			})
 			// Update
 			.addCase(updateTask.fulfilled, (state, action) => {
@@ -164,10 +176,18 @@ const tasksSlice = createSlice({
 					state.list.findIndex((el) => el.id === action.payload.id)
 				] = action.payload
 
-				state.operationMessage = 'Task was successfully updated.'
+				state.operationLog = {
+					id: state.operationLog.id + 1,
+					message: 'Task was successfully updated.',
+					type: 'success',
+				}
 			})
 			.addCase(updateTask.rejected, (state, action) => {
-				state.operationMessage = `Failed to update Task. Try again later.\nError: ${action.payload}`
+				state.operationLog = {
+					id: state.operationLog.id + 1,
+					message: `Failed to update Task. Try again later.\nError: ${action.payload}`,
+					type: 'failure',
+				}
 			})
 			// Delete
 			.addCase(deleteTask.fulfilled, (state, action) => {
@@ -177,10 +197,18 @@ const tasksSlice = createSlice({
 					1
 				)
 
-				state.operationMessage = 'Task removed.'
+				state.operationLog = {
+					id: state.operationLog.id + 1,
+					message: 'Task was removed.',
+					type: 'success',
+				}
 			})
 			.addCase(deleteTask.rejected, (state, action) => {
-				state.operationMessage = `Could not remove task. Try again later.\nError: ${action.payload}`
+				state.operationLog = {
+					id: state.operationLog.id + 1,
+					message: `Could not remove task. Try again later.\nError: ${action.payload}`,
+					type: 'failure',
+				}
 			})
 	},
 })

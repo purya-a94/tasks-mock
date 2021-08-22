@@ -1,9 +1,5 @@
 import axiosClient from '../axiosClient'
 
-// const setUserDataToStorage = (userData) => {
-// 	localStorage.setItem('user', JSON.stringify(userData))
-// }
-
 const userSignOn = async (username, password) => {
 	try {
 		const response = await axiosClient.post('/auth/register', {
@@ -55,12 +51,13 @@ const userSignIn = async (username, password) => {
 				accessToken: response.data.data.token,
 			}
 
-			// setUserDataToStorage(userData)
+			localStorage.setItem('user', JSON.stringify(userData))
 
 			return userData
 		} else {
 			throw Error(response.data.message)
 		}
+
 		// return response.data
 	} catch (error) {
 		if (error.response) {

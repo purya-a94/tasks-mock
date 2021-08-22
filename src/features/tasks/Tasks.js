@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 // import useFetch from '../../app/hooks/useFetch'
 import { useForm } from 'react-hook-form'
@@ -8,6 +8,7 @@ import Task from './Task/Task'
 
 import styles from './Tasks.module.css'
 import Loader from 'react-loader-spinner'
+import Swal from 'sweetalert2'
 
 function Tasks() {
 	const tasks = useSelector((state) => state.tasks)
@@ -23,21 +24,34 @@ function Tasks() {
 		reset: resetForm,
 	} = useForm()
 
+	// Initial tasks load
 	useEffect(() => {
 		dispatch(getTasks())
 	}, [dispatch])
 
+	// Reset task creation form
 	useEffect(() => {
 		if (isSubmitSuccessful) {
 			resetForm()
 		}
 	}, [isSubmitSuccessful, resetForm])
 
-	// Alert the result of the user's interaction
-	// Very basic implementation just to show the idea of notifications, has bugs.
-	// useEffect(() => {
-	// 	if (!!tasks.operationMessage) alert(tasks.operationMessage)
-	// }, [tasks.operationMessage])
+	// Show user's operation result as toasts
+	useEffect(() => {
+		if (tasks.operationLog.id !== -1) {
+			Swal.fire({
+				position: 'bottom-right',
+				toast: true,
+				icon:
+					tasks.operationLog.type === 'success' ? 'success' : 'error',
+				title: tasks.operationLog.message,
+				showConfirmButton: false,
+				showCloseButton: true,
+				timer: 1500,
+				timerProgressBar: true,
+			})
+		}
+	}, [tasks.operationLog])
 
 	const createTask = ({ title, type, description }) => {
 		// This duplicity is only for clarification.

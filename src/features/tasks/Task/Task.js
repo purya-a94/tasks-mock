@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { MdEdit, MdDeleteForever } from 'react-icons/md'
@@ -29,6 +29,7 @@ function Task({ details, editHandler, removeHandler }) {
 	const submitEdit = (formValues) => {
 		editHandler(details.id, formValues)
 
+		// ??
 		setIsEditing(false)
 	}
 
