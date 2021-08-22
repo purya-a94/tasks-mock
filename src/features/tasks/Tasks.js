@@ -206,7 +206,7 @@ function Tasks() {
 						color="#00695C"
 						height={40}
 						width={40}
-						className="text-center"
+						className="text-center mt-5"
 					/>
 				) : tasks.status === 'rejected' ? (
 					/*
